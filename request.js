@@ -24,14 +24,18 @@ request.setOptions = function(opt) {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
     };
-    if (opt && opt.path) {
-        options.host = opt.host;
+    if (opt && opt.hostname) {
+        options.hostname = opt.hostname;
+        options.headers['Host'] = opt.hostname;
+    }
+    if (opt && opt.referer) {
+        options.headers['Referer'] = opt.referer;
     }
     if (opt && opt.path) {
         options.path = opt.path;
     }
     if (opt && opt.cookie) {
-        options.headers['Cookie'] = cookie;
+        options.headers['Cookie'] = opt.cookie;
     }
 
     return options;
@@ -41,18 +45,18 @@ request.sendRequest = function(options, postData, callback) {
     var req = http.request(options, function(res) {
         //console.log('Status: ' + res.statusCode);
         //console.log('Headers' + JSON.stringify(res.headers));
-
         var data = '';
         res.on('data', function(chunk) {
             data += chunk;
         });
 
         res.on('end', function() {
-            //console.log(data);
             if (callback) {
-                try{
+                try {
                     callback(JSON.parse(data));
-                }catch(e){}
+                } catch(e) {
+                    callback(data);
+                }
             }
         });
     });

@@ -25,7 +25,7 @@ util.now = function() {
 util.log = function(content, file) {
     var content = util.getTime() + ':' + content + '\r\n';
     console.log(content);
-    fs.appendFileSync(file, content);
+    if (file) fs.appendFileSync(file, content);
 };
 
 // 生成指定范围内随机数
@@ -51,11 +51,21 @@ function init() {
             }
         }
     });
-
+    var file = config.common.record.comment.file;
+    var records = fs.readFileSync(file, 'utf-8').split('\r\n');
+    for (var i = 0; i < records.length; i ++) {
+        if (records[i]) config.common.record.comment.data[records[i]] = records[i];
+    }
     // 评论库
     config.caicai.library = fs.readFileSync('./library/comments_caicai.txt', 'utf-8').split('\r\n');
     config.fengzi.library = fs.readFileSync('./library/comments_fengzi.txt', 'utf-8').split('\r\n');
 }
 init();
 
-//console.log(config)
+var formatStr = /\{([\s\S]+?)\}/g;
+String.prototype.format = function () {
+    var me = this, args = (typeof arguments[0] == 'object') ? arguments[0] : arguments;
+    return me.replace(formatStr, function (m, i) {
+        return m == "{{}" || m == "{}}" ? i : args[i] || '';
+    });
+};

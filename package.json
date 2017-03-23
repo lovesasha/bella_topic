@@ -1,0 +1,24 @@
+{
+  "name": "bella_topic",
+  "version": "1.0.0",
+  "description": "- 安装node环境\r - 在项目下运行命令:node mian",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lovesasha/bella_topic.git"
+  },
+  "author": "sasha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lovesasha/bella_topic/issues"
+  },
+  "homepage": "https://github.com/lovesasha/bella_topic#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "iconv-lite": "^0.4.15",
+    "request": "^2.81.0"
+  }
+}

@@ -4,7 +4,7 @@ var config = require('./config');
 
 // 维护st字段的更新
 function updateSt() {
-    var users = ['caicai', 'caicaix'];
+    var users = ['caicai', 'caicaix', 'fengzi'];
     users.forEach(function(user) {
         proxy.config(config[user]);
     });
@@ -16,24 +16,33 @@ setInterval(function() {
 
 // 评论
 function comment() {
-    var users = ['caicai'];
+    var users = ['caicai', 'fengzi'];
     proxy.getIndexList(function(data) {
-        users.forEach(function(user) {
-            user = config[user];
+        //users.forEach(function(user) {
+        //    user = config[user];
             for (var i = 0; i < data.length; i ++) {
                 (function(i) {
                     setTimeout(function() {
                         var id = data[i].mblog.id;
-                        if (id in user.record.comment.data) {
+                        users.forEach(function(user) {
+                            user = config[user];
+                            if (id in config.common.record.comment.data) {
+                                console.log(util.getTime() + ':' + id + '已评论过')
+                            } else {
+                                proxy.comment(id, user);
+                            }
+                        });
+                        util.record(id, config.common.record.comment);
+                        /*if (id in user.record.comment.data) {
                             console.log(util.getTime() + ':' + id + '已评论过')
                         } else {
                             proxy.comment(id, user);
                             util.record(id, user.record.comment);
-                        }
+                        }*/
                     }, i * 1000);
                 })(i);
             }
-        });
+        //});
     });
 
 }
